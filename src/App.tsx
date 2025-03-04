@@ -10,6 +10,10 @@ function App() {
         base: `"nav" "main"`,
         md: `"nav nav" "aside main"`,
       }}
+      templateColumns={{
+        base: "1fr",
+        md: "200px 1fr",
+      }}
     >
       <GridItem area="nav">
         <NavBar />
@@ -17,7 +21,7 @@ function App() {
       {useBreakpointValue({
         base: null,
         md: (
-          <GridItem area="aside">
+          <GridItem area="aside" paddingX={6} paddingY={2}>
             <GenreList />
           </GridItem>
         ),

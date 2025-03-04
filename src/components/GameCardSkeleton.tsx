@@ -8,15 +8,13 @@ import {
 const GameCardSkeleton = () => {
   return (
     <Card.Root>
-      <Skeleton>
-        <CardBody height="200px">
-          <SkeletonText noOfLines={2} gap="4" />
-          <HStack>
-            <SkeletonText noOfLines={2} />
-            <SkeletonCircle size="10" />
-          </HStack>
-        </CardBody>
-      </Skeleton>
+      <Skeleton height="200px" />
+      <CardBody>
+        <HStack justify="space-between">
+          <SkeletonText noOfLines={1} gap="2" />
+          <SkeletonCircle size="10" />
+        </HStack>
+      </CardBody>
     </Card.Root>
   );
 };

@@ -6,7 +6,7 @@ import GameCardContainer from "./GameCardContainer";
 
 const GameGrid = () => {
   const { data, error, isLoading } = useGames();
-  const skeleton = Array.from({ length: 10 }).map((_, i) => i);
+  const skeleton = Array.from({ length: 20 }).map((_, i) => i);
 
   return (
     <div>
@@ -15,7 +15,7 @@ const GameGrid = () => {
         <SimpleGrid
           columns={{ base: 1, md: 2, lg: 3, xl: 5 }}
           padding={5}
-          gap={10}
+          gap={3}
         >
           {isLoading &&
             skeleton.map((i) => (

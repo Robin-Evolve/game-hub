@@ -5,9 +5,10 @@ import { SkeletonText } from "@/components/ui/skeleton";
 
 interface Props {
   onSelectGenre: (genre: Genre) => void;
+  selectedGenre: Genre | null;
 }
 
-const GenreList = ({ onSelectGenre }: Props) => {
+const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   const { data, isLoading, error } = useGenres();
 
   if (error) return;
@@ -31,8 +32,11 @@ const GenreList = ({ onSelectGenre }: Props) => {
                 e.preventDefault();
                 onSelectGenre(genre);
               }}
+              fontWeight={selectedGenre?.id === genre.id ? "bold" : "normal"}
               variant="plain"
               href="#"
+              border="none"
+              _focus={{ outline: "none" }}
             >
               {genre.name}
             </Link>

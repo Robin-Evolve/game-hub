@@ -26,7 +26,10 @@ function App() {
         base: null,
         md: (
           <GridItem area="aside" paddingX={6} paddingY={2}>
-            <GenreList onSelectGenre={setSelectGenre} />
+            <GenreList
+              selectedGenre={selectedGenre}
+              onSelectGenre={setSelectGenre}
+            />
           </GridItem>
         ),
       })}

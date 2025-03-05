@@ -1,5 +1,6 @@
+import { Platform } from "@/hooks/useGames";
 import usePlatform from "@/hooks/usePlatform";
-import { Button } from "@chakra-ui/react";
+import { Button, HStack } from "@chakra-ui/react";
 import {
   MenuContent,
   MenuItem,
@@ -8,27 +9,49 @@ import {
 } from "@chakra-ui/react/menu";
 import { BsChevronDown } from "react-icons/bs";
 
-const PlatformSelector = () => {
+interface Pros {
+  onSelectedPlatform: (platform: Platform | null) => void;
+  selectedPlatform?: Platform | null;
+}
+
+const PlatformSelector = ({ onSelectedPlatform, selectedPlatform }: Pros) => {
   const { data, error } = usePlatform();
 
   if (error) {
     return null;
   }
   return (
-    <MenuRoot>
-      <MenuTrigger asChild>
-        <Button variant="outline" marginX={5} marginY={3}>
-          Platform <BsChevronDown />
-        </Button>
-      </MenuTrigger>
-      <MenuContent marginX={5}>
-        {data.map((platform) => (
-          <MenuItem key={platform.id} value={platform.slug}>
-            {platform.name}
+    <HStack position="relative">
+      <MenuRoot>
+        <MenuTrigger asChild>
+          <Button variant="outline">
+            {selectedPlatform?.name || "Platform"} <BsChevronDown />
+          </Button>
+        </MenuTrigger>
+        <MenuContent position="absolute" top="50px" width="180px">
+          <MenuItem
+            key="all"
+            value="all"
+            onClick={() => {
+              onSelectedPlatform(null);
+            }}
+          >
+            All
           </MenuItem>
-        ))}
-      </MenuContent>
-    </MenuRoot>
+          {data.map((platform) => (
+            <MenuItem
+              key={platform.id}
+              value={platform.slug}
+              onClick={() => {
+                onSelectedPlatform(platform);
+              }}
+            >
+              {platform.name}
+            </MenuItem>
+          ))}
+        </MenuContent>
+      </MenuRoot>
+    </HStack>
   );
 };
 

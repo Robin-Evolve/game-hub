@@ -2,13 +2,14 @@ import { VercelRequest, VercelResponse } from "@vercel/node";
 import axios from "axios";
 
 // Load API Key from environment variables
-const API_KEY = process.env.RAWG_API_KEY;
+const API_KEY = process.env.VITE_RAWG_API_KEY;
 const RAWG_BASE_URL = "https://api.rawg.io/api";
 
 export default async (req: VercelRequest, res: VercelResponse) => {
   const { endpoint, ...query } = req.query;
 
   if (!API_KEY) {
+    console.error("API Key is missing");
     return res.status(500).json({ error: "API Key is missing" });
   }
 
@@ -17,23 +18,18 @@ export default async (req: VercelRequest, res: VercelResponse) => {
     const url = `${RAWG_BASE_URL}/${endpoint}?key=${API_KEY}&${new URLSearchParams(
       query as Record<string, string>
     ).toString()}`;
+
     const response = await axios.get(url);
 
-    // Allow CORS
+    // Allow CORS for all origins
     res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
     res.status(200).json(response.data);
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("RAWG API Proxy Error:", error.message);
-      res
-        .status(error.response?.status || 500)
-        .json({ error: error.response?.data || "Failed to fetch data" });
-    } else if (error instanceof Error) {
-      console.error("General Error:", error.message);
-      res.status(500).json({ error: "An unexpected error occurred" });
-    } else {
-      console.error("Unknown Error:", error);
-      res.status(500).json({ error: "Unknown error occurred" });
-    }
+    console.error("RAWG API Proxy Error:", error);
+    res.status(500).json({ error: "Failed to fetch data from RAWG API" });
   }
 };

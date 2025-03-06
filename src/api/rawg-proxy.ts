@@ -13,11 +13,18 @@ export default async (req: VercelRequest, res: VercelResponse) => {
     return res.status(500).json({ error: "API Key is missing" });
   }
 
+  if (!endpoint) {
+    console.error("Endpoint is missing");
+    return res.status(400).json({ error: "Endpoint is missing" });
+  }
+
   try {
     // Build the target URL with query parameters
     const url = `${RAWG_BASE_URL}/${endpoint}?key=${API_KEY}&${new URLSearchParams(
       query as Record<string, string>
     ).toString()}`;
+
+    console.log("Forwarding request to:", url); // Log the URL for debugging
 
     const response = await axios.get(url);
 

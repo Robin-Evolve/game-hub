@@ -1,42 +1,55 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import axios from "axios";
 
-// Load API Key from environment variables
 const API_KEY = process.env.VITE_RAWG_API_KEY;
 const RAWG_BASE_URL = "https://api.rawg.io/api";
 
-export default async (req: VercelRequest, res: VercelResponse) => {
+const handler = async (req: VercelRequest, res: VercelResponse) => {
+  console.log("API KEY:", API_KEY ? "Exists" : "Missing");
+  console.log("Request URL:", req.url);
+
   const { endpoint, ...query } = req.query;
 
   if (!API_KEY) {
-    console.error("API Key is missing");
+    console.error("API Key is missing in environment variables!");
     return res.status(500).json({ error: "API Key is missing" });
   }
 
   if (!endpoint) {
-    console.error("Endpoint is missing");
+    console.error("Endpoint is missing in query parameters!");
     return res.status(400).json({ error: "Endpoint is missing" });
   }
 
   try {
-    // Build the target URL with query parameters
     const url = `${RAWG_BASE_URL}/${endpoint}?key=${API_KEY}&${new URLSearchParams(
       query as Record<string, string>
     ).toString()}`;
 
-    console.log("Forwarding request to:", url); // Log the URL for debugging
+    console.log("Forwarding request to:", url);
 
     const response = await axios.get(url);
 
-    // Allow CORS for all origins
+    console.log("API Response Status:", response.status);
+
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
     res.status(200).json(response.data);
-  } catch (error) {
-    console.error("RAWG API Proxy Error:", error);
-    res.status(500).json({ error: "Failed to fetch data from RAWG API" });
+  } catch (error: any) {
+    console.error("RAWG API Proxy Error:", error.message);
+    if (error.response) {
+      console.error("RAWG API Response Error:", error.response.data);
+      res.status(error.response.status).json({
+        error: error.response.data,
+        message: error.message,
+      });
+    } else {
+      res
+        .status(500)
+        .json({
+          error: "Failed to fetch data from RAWG API",
+          message: error.message,
+        });
+    }
   }
 };
+
+export default handler;

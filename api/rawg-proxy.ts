@@ -10,6 +10,19 @@ const handler = async (req: VercelRequest, res: VercelResponse) => {
 
   const { endpoint, ...query } = req.query;
 
+  // Enable CORS for all origins
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+
+  if (req.method === "OPTIONS") {
+    // Preflight request
+    return res.status(200).end();
+  }
+
   if (!API_KEY) {
     console.error("API Key is missing in environment variables!");
     return res.status(500).json({ error: "API Key is missing" });
@@ -31,7 +44,6 @@ const handler = async (req: VercelRequest, res: VercelResponse) => {
 
     console.log("API Response Status:", response.status);
 
-    res.setHeader("Access-Control-Allow-Origin", "*");
     res.status(200).json(response.data);
   } catch (error: any) {
     console.error("RAWG API Proxy Error:", error.message);

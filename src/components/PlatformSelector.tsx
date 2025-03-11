@@ -1,4 +1,4 @@
-import { Platform } from "@/hooks/useGames";
+import { Platform } from "@/hooks/usePlatform";
 import usePlatform from "@/hooks/usePlatform";
 import { Button, HStack } from "@chakra-ui/react";
 import {
@@ -38,7 +38,7 @@ const PlatformSelector = ({ onSelectedPlatform, selectedPlatform }: Pros) => {
           >
             All
           </MenuItem>
-          {data.map((platform) => (
+          {data?.results.map((platform) => (
             <MenuItem
               key={platform.id}
               value={platform.slug}

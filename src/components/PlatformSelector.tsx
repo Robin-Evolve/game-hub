@@ -1,3 +1,4 @@
+import usePlatform from "@/hooks/usePlatform";
 import { Platform } from "@/hooks/usePlatforms";
 import usePlatforms from "@/hooks/usePlatforms";
 import { Button, HStack } from "@chakra-ui/react";
@@ -19,9 +20,7 @@ const PlatformSelector = ({
   selectedPlatformID,
 }: Pros) => {
   const { data, error } = usePlatforms();
-  const selectedPlatform = data?.results.find(
-    (p) => p.id === selectedPlatformID
-  );
+  const selectedPlatform = usePlatform(selectedPlatformID);
 
   if (error) {
     return null;

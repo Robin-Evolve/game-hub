@@ -1,14 +1,14 @@
-import useGenres, { Genre } from "@/hooks/useGenres";
+import useGenres from "@/hooks/useGenres";
 import getCroppedImageUrl from "@/services/image-url";
 import { HStack, List, Image, Link, Box, Heading } from "@chakra-ui/react";
 import { SkeletonText } from "@/components/ui/skeleton";
 
 interface Props {
-  onSelectGenre: (genre: Genre) => void;
-  selectedGenre: Genre | null;
+  onSelectGenre: (genreID: number) => void;
+  selectedGenreID?: number;
 }
 
-const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
+const GenreList = ({ selectedGenreID, onSelectGenre }: Props) => {
   const { data, isLoading, error } = useGenres();
 
   if (error) return;
@@ -37,9 +37,9 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
               <Link
                 onClick={(e) => {
                   e.preventDefault();
-                  onSelectGenre(genre);
+                  onSelectGenre(genre.id);
                 }}
-                fontWeight={selectedGenre?.id === genre.id ? "bold" : "normal"}
+                fontWeight={selectedGenreID === genre.id ? "bold" : "normal"}
                 variant="plain"
                 href="#"
                 border="none"

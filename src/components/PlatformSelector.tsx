@@ -1,5 +1,5 @@
-import { Platform } from "@/hooks/usePlatform";
-import usePlatform from "@/hooks/usePlatform";
+import { Platform } from "@/hooks/usePlatforms";
+import usePlatforms from "@/hooks/usePlatforms";
 import { Button, HStack } from "@chakra-ui/react";
 import {
   MenuContent,
@@ -10,12 +10,18 @@ import {
 import { BsChevronDown } from "react-icons/bs";
 
 interface Pros {
-  onSelectedPlatform: (platform: Platform | null) => void;
-  selectedPlatform?: Platform | null;
+  onSelectedPlatformID: (platform: Platform | null) => void;
+  selectedPlatformID?: number;
 }
 
-const PlatformSelector = ({ onSelectedPlatform, selectedPlatform }: Pros) => {
-  const { data, error } = usePlatform();
+const PlatformSelector = ({
+  onSelectedPlatformID,
+  selectedPlatformID,
+}: Pros) => {
+  const { data, error } = usePlatforms();
+  const selectedPlatform = data?.results.find(
+    (p) => p.id === selectedPlatformID
+  );
 
   if (error) {
     return null;
@@ -33,7 +39,7 @@ const PlatformSelector = ({ onSelectedPlatform, selectedPlatform }: Pros) => {
             key="all"
             value="all"
             onClick={() => {
-              onSelectedPlatform(null);
+              onSelectedPlatformID(null);
             }}
           >
             All
@@ -43,7 +49,7 @@ const PlatformSelector = ({ onSelectedPlatform, selectedPlatform }: Pros) => {
               key={platform.id}
               value={platform.slug}
               onClick={() => {
-                onSelectedPlatform(platform);
+                onSelectedPlatformID(platform);
               }}
             >
               {platform.name}

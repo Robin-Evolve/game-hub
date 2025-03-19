@@ -20,7 +20,7 @@ const GameCard = ({ game }: Pros) => {
           <CreditScore score={game.metacritic} />
         </HStack>
         <Heading fontSize="2xl">
-          <Link to={`/games/${game.slug}`}>
+          <Link to={`/game/${game.slug}`}>
             {game.name} <Emoji rating={game.rating_top} />
           </Link>
         </Heading>

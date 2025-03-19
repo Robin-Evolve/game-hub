@@ -24,18 +24,20 @@ const HomePage = () => {
         md: "200px 1fr",
       }}
     >
-      <GridItem area="nav">
-        <NavBar />
-      </GridItem>
       {useBreakpointValue({
         base: null,
         md: (
-          <GridItem area="aside" paddingX={6} paddingY={2}>
+          <GridItem
+            area="aside"
+            paddingX={6}
+            paddingY={2}
+            className="genre-list"
+          >
             <GenreList />
           </GridItem>
         ),
       })}
-      <GridItem area="main">
+      <GridItem area="main" className="game-grid">
         <Box paddingLeft={5}>
           <GameHeading />
           <HStack gap={3}>
